@@ -1,11 +1,9 @@
 import mongoose, {Schema, Document} from 'mongoose';
 
-
 export interface Message extends Document{ // define blueprint for data
     content: string;
     createdAt: Date;
 }
-
 
 const MessageSchema: Schema<Message> = new Schema({
     content: {
@@ -18,7 +16,6 @@ const MessageSchema: Schema<Message> = new Schema({
         default: Date.now()
     }
 })
-
 
 export interface User extends Document{ // define blueprint for data
     username: string;
