@@ -1,4 +1,3 @@
-import { log } from 'console'
 import mongoose from 'mongoose'
 
 
@@ -11,6 +10,7 @@ const connection: ConnectionObject = {}
 async function dbConnect(): Promise<void> {
     if (connection.isConnected) { // check if Database already connected or not
         console.log("Already connected to database");
+        return;
     }
 
     try {
