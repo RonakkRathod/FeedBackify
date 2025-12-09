@@ -64,14 +64,14 @@ const page = () => {
         try {
             const response = await axios.post<ApiResponse>('/api/sign-up', data)
             console.log(response)
-            toast.success('Account created successfully!') // show success message
+            toast.success('Account created successfully!',{duration: 2000}) // show success message
             router.replace(`/verify/${username}`) // redirect to verify page
             setIsSubmitting(false)
         } catch (error) {
             console.error("Error in signup user",error)
             const axiosError = error as AxiosError<ApiResponse>
             let errorMessage = axiosError.response?.data.message
-            toast.error('Error creating account'+errorMessage)
+            toast.error('Error creating account',{duration:2000})
         }
     }
 
