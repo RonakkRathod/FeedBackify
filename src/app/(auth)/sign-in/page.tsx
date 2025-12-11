@@ -9,10 +9,13 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { signInSchema } from "@/Schemas/signInSchema"
 import { signIn } from "next-auth/react"
+import { Loader2 } from "lucide-react"
+import { useState } from "react"
 
 const logInPage = () => {
 
     const router = useRouter()
+    const [isLoading, setIsLoading] = useState(false)
 
     // zod implementation
     const form = useForm<z.infer<typeof signInSchema>>({
@@ -24,6 +27,7 @@ const logInPage = () => {
     })
 
     const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+        setIsLoading(true)
         const result  = await signIn('credentials', { // fetch from next-auth
          redirect: false,
          identifier: data.identifier,
@@ -37,6 +41,7 @@ const logInPage = () => {
        if (result?.url) {
           router.replace('/dashboard')
         }
+        setIsLoading(false)
     }
 
   return ( // basic sign up form    
@@ -82,8 +87,8 @@ const logInPage = () => {
                     )}
                 />
 
-                <Button type="submit">
-                   sign In
+                <Button className="w-full" type="submit" disabled={isLoading}>
+                   {isLoading ? <Loader2 className="animate-spin" /> : "Sign In"}
                 </Button>
                 </form>
             </Form>
