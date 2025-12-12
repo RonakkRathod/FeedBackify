@@ -1,9 +1,9 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/Model/User.model";
 
-export async function GET(request: Request,{params}: {params: {username: string}}) {
+export async function GET(request: Request, context: { params: Promise<{ username: string }> }) {
 
-    const username = params.username
+    const { username } = await context.params
     await dbConnect()
 
     try {
