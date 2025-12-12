@@ -41,33 +41,38 @@ const MessageCard = ({ message, onMessageDelete}: MessageCardProps) => {
     }
     
   return (
-   <Card>
-        <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-             <AlertDialog>
-                <AlertDialogTrigger asChild>
-                    <Button variant="destructive"><X className="w-5 h-5"/></Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your
-                        account and remove your data from our servers.
-                    </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteConfirm}>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-            <CardDescription>Card Description</CardDescription>
-            <CardAction>Card Action</CardAction>
-        </CardHeader>
-        <CardContent>
-        </CardContent>
-    </Card>
+     <Card>
+                <CardHeader className="flex flex-row items-start justify-between gap-4">
+                        <div>
+                            <CardTitle className="text-lg">Message</CardTitle>
+                            <CardDescription>
+                                {new Date(message.createdAt).toLocaleString()}
+                            </CardDescription>
+                        </div>
+                        <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                        <Button variant="destructive" size="icon" aria-label="Delete message">
+                                            <X className="w-5 h-5" />
+                                        </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                        <AlertDialogTitle>Delete this message?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                                This action cannot be undone.
+                                        </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction onClick={handleDeleteConfirm}>Delete</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                </AlertDialogContent>
+                        </AlertDialog>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-lg font-bold leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                </CardContent>
+        </Card>
   )
 }
 
