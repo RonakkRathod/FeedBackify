@@ -23,6 +23,7 @@ const dashboard = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSwitchLoading, setIsSwitchLoading] = useState(false)
 
+
   const handleDeleteMessage = (messageId: string) => {
       setMessages(messages.filter((message) => message._id.toString() !== messageId)) // remove message by id
   }
@@ -30,7 +31,8 @@ const dashboard = () => {
   const {data: session} = useSession()
 
   const form = useForm({
-    resolver: zodResolver(acceptingMessageSchema)
+    resolver: zodResolver(acceptingMessageSchema),
+    defaultValues: { acceptMessages: false }
   })
 
   const {register, watch, setValue} = form; 
@@ -50,12 +52,13 @@ const dashboard = () => {
     }
   },[setValue])
 
-  // useCallback to not every timr render recreate the function
+  // useCallback to not every time render recreate the function
   const fetchMessages = useCallback( async (refresh: boolean = false) => {
     setIsLoading(true)
     setIsSwitchLoading(true)
     try {
       const response = await axios.get<ApiResponse>('/api/get-messages')
+      console.log("response for get messages",response)
       setMessages(response?.data.messages || [])
 
       if (refresh) {
@@ -90,8 +93,8 @@ const dashboard = () => {
   }
   
   // construct profile URL and copy to clipboard
-  const username = session?.user as User
-  const baseUrl = `${window.location.protocol}//${window.location.host}` 
+  const username = (session?.user as User)?.username ?? ''
+  const baseUrl = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
   const profileUrl = `${baseUrl}/u/${username}`
 
   const copyToClipboard = () => {
@@ -105,7 +108,7 @@ const dashboard = () => {
 
   return (
      <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
-      <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
+      <h1 className="text-5xl font-bold mb-4">User Dashboard</h1>
 
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
@@ -122,8 +125,7 @@ const dashboard = () => {
 
       <div className="mb-4">
         <Switch
-          {...register('acceptMessages')}
-          checked={acceptMessages}
+          checked={!!acceptMessages}
           onCheckedChange={handleSwitchChange}
           disabled={isSwitchLoading}
         />
