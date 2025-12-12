@@ -8,7 +8,7 @@ export async function POST(request: Request){
     const {username, content} = await request.json()
 
     try {
-        const user = await UserModel.findOne(username)
+        const user = await UserModel.findOne({username})
 
         if (!user) {
             return Response.json({
@@ -26,6 +26,13 @@ export async function POST(request: Request){
         }
 
         const newMessage = {content, createdAt: new Date()}
+
+        if (content.length === 0) {
+            return Response.json({
+                success: false,
+                message: "Message cannot be empty"
+            }, { status: 400 })
+        }
 
         user.messages.push(newMessage as Message) // add new message
         await user.save()
